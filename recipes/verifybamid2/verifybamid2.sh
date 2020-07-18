@@ -3,7 +3,8 @@
 # Avoids name conflicts with standard VerifyBamID and
 # provides each access to referencing resource files
 # Usage:
-# verifybamid2 <SVD_name> <density> <genome_build> <other> <args>
+# verifybamid2 -h or --help
+# please refer to detailed usage at https://github.com/Griffan/VerifyBamID#verifybamid2
 set -eu -o pipefail
 
 # Find original directory of bash script, resolving symlinks
@@ -16,15 +17,10 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-SVG="${1:-1000g}"
-DENSITY="${2:-100k}"
-GENOME="${3:-b38}"
-if [[ $SVG == "-h" || $SVG == "--help" ]]; then
-	echo "Usage: verifybamid2 <SVG_name> <density> <genome> <other> <VerifyBamID> <args>"
-	echo "<SVG_name> can be 1000g 1000g.phase3 or hgdp"
-	echo "<density> can be 100k or 10k"
-	echo "<genome> can be b37 or b38"
+
+if [[ $SVD == "-h" || $SVD == "--help" ]]; then
 	$DIR/VerifyBamID --help
+	echo "Notice: The default resorce files for --SVDPrefix are located at $DIR/resource/"
 else
-	$DIR/VerifyBamID --SVDPrefix $DIR/resource/$SVG.$DENSITY.$GENOME.vcf.gz.dat "${@:4}"
+	$DIR/VerifyBamID $@
 fi
